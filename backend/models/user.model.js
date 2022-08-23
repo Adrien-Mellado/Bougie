@@ -6,3 +6,11 @@ const userSchema = mongoose.Schema({
 });
 
 module.exports = mongoose.model ('User', userSchema) ;
+
+
+ // Securiser le mot de pass de l'utilisateur // 
+ userSchema.pre("save" , async function (next){
+    const salt = await bcrypt.genSalt();
+    this.password = await bcrypt.hash (this.password, salt);
+    next();
+ });
